@@ -51,12 +51,13 @@ You will now explore the advantages of using a multi-stage build to remove unnec
 
 ## 6.3 Dockerize an Angular application
 
-In this exercise you are going to use all your Docker knowledge to create an optimize a `Dockerfile` to deploy an angular application inside of a nginx webserver.
+In this exercise you are going to use all your Docker knowledge to create an optimized a `Dockerfile` to deploy an angular application inside of a nginx webserver.
 
 Inside the `3-sample-angular-app` folder you will find a very simple angular application. Create a `Dockerfile` inside this folder, to distribute the app so it runs inside `nginx`.
 
 Hints:
-- Use one of the official `node` images [link](https://hub.docker.com/_/node)
+- Use one of the official `node 14` images [link](https://hub.docker.com/_/node).
+- Set a workdir like `/app` to copy and build the application.
 - Dependencies are installed running `npm install`. This only requires access to the `package.json` file (and optionally `package-lock.json` if it exists).
 - You can build the application using the `npm run build` command. This will build it inside the `/dist/my-app/` folder. For this to work, it requires:
   - all the files from the `src` folder
@@ -73,11 +74,11 @@ As part of the build process of the Angular app, also ensure all tests are execu
 
 1. Ensure you are base image is `node:14`
 1. Create a new stage `test` where you will install Chrome. E.g.
-  ```Dockerfile
-  RUN apt-get update \
-    && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && apt install -y ./google-chrome*.deb
-  ```
+    ```Dockerfile
+    RUN apt-get update \
+      && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+      && apt install -y ./google-chrome*.deb
+    ```
 1. Set the `CHROME_BIN` environment variable to the location of chrome `/usr/bin/google-chrome`
 1. Copy the test configuration files `karma.conf.js` and `tsconfig.spec.json` into the root folder.
 1. Run the tests `npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox`
